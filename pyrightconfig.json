@@ -1,0 +1,18 @@
+{
+  "venvPath": "/opt/homebrew/Caskroom/miniforge/base/envs/",
+  "venv": "js_up_2024",
+  "pythonVersion": "3.12",
+  "extraPaths": [
+    "~/Documents/GIS/js_up",
+    "/Users/zwarott/Documents/GIS/js_up",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/js_up_2024/share/qgis/python/plugins",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/js_up_2024/share/qgis/python",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/betting/lib/python3.12/site-packages",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/conda-qgis/lib/python3.12/site-packages",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/flask/lib/python3.12/site-packages",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/js_up_2O23/lib/python3.12/site-packages",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/postgres/lib/python3.12/site-packages",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/unix_shell/lib/python3.12/site-packages",
+    "/opt/homebrew/Caskroom/miniforge/base/envs/whufc/lib/python3.12/site-packages"
+  ]
+}
