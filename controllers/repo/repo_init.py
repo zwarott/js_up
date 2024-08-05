@@ -4,11 +4,21 @@ from unidecode import unidecode
 import pandas as pd
 
 
-def normalize_mun_name(mun_name):
+def normalize_mun_name(mun_name: str) -> str:
     """
     Normalize municipality name to lowercase and replace special characters.
     Czech characters such as ě, š, č, ř, ž, ý, á, í, é, ú, ů are replaced
     as well.
+
+    Parameters
+    ----------
+    mun_name: str
+        Municipality name to be normalized.
+
+    Returns
+    -------
+    str
+        Normalized municipality name.
     """
     return unidecode(mun_name).replace(" ", "_").lower()
 
@@ -23,17 +33,27 @@ def init_with_import(
 ) -> None:
     """
     Initialize a Kart repository with the given parameters and import data
-    from GeoPackage into working directory.
+    from GeoPackage into the working directory.
 
-    Args:
-        default_repo (str): The default repository path with all spatial plans.
-        municipalities_csv (str): The path to the municipalities CSV file.
-        mun_code (int): The municipality code.
-        new_or_change (int): Indicator for new spatial plan (0) or change (1).
-        change_number (int): The change number (used if new_or_change is 1).
-        gpkg_to_import (str): The GeoPackage file to import.
+    Parameters
+    ----------
+    default_repo : str
+        The default repository path with all spatial plans.
+    municipalities_csv : str
+        The path to the municipalities CSV file.
+    mun_code : int
+        The municipality code.
+    new_or_change : int
+        Indicator for new spatial plan (0) or change (1).
+    change_number : int
+        The change number (used if new_or_change is 1).
+    gpkg_to_import : str
+        The GeoPackage file to import.
+
+    Returns
+    -------
+    None
     """
-
     try:
         # Load the municipalities CSV file
         df = pd.read_csv(municipalities_csv)
