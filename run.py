@@ -1,4 +1,5 @@
 from controllers.data.export_data import export_working_dir
+from controllers.data.inspect_data import shp_overview
 
 from controllers.layout.convert_layout import raster_to_24bit
 from controllers.layout.inspect_layout import check_24bit_depth
@@ -33,6 +34,12 @@ function_map = {
             "include_layers": INCLUDE_LAYERS,
             "export_empty_layers": False,
             "encoding": encoding,
+        },
+    },
+    "shp_overview": {
+        "func": shp_overview,
+        "params": {
+            "data_dir": output_data_dir,
         },
     },
     "init_with_import": {
@@ -75,4 +82,5 @@ def execute_function(function_name):
 # execute_function("export_working_dir")
 # execute_function("init_with_import")
 # execute_function("raster_to_24bit")
-execute_function("check_24bit_depth")
+# execute_function("check_24bit_depth")
+execute_function("shp_overview")
