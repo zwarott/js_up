@@ -60,13 +60,13 @@ def init_with_import(
 
         # Validate MUN_CODE and get corresponding MUN_NAME
         if mun_code not in df["mun_code"].values:
-            print("Input municipality code is not valid.")
+            print("❗️ Input municipality code is not valid.")
             return
         else:
             # Extract municipality name from mun_name attribute and normalize it
             mun_name = df.loc[df["mun_code"] == mun_code, "mun_name"].values[0]
             mun_name = normalize_mun_name(mun_name)
-            print(f"Normalized municipality name: {mun_name}")
+            print(f"💡 Normalized municipality name: {mun_name}")
 
             # Repo name for new spatial plan
             if new_or_change == 0:
@@ -77,13 +77,13 @@ def init_with_import(
 
             # Create the full path for the spatial plan repository
             spatial_plan_path = os.path.join(default_repo, spatial_plan)
-            print(f"Spatial plan path: {spatial_plan_path}")
+            print(f"💡 Spatial plan path: {spatial_plan_path}")
 
             # Initialize the Kart repository
             init_command = (
                 f"kart init {spatial_plan_path} --import GPKG:{gpkg_to_import}"
             )
-            print(f"Running command: {init_command}")
+            print(f"💡 Running command: {init_command}")
             subprocess.run(init_command, shell=True, check=True)
 
             # Create the folder structure with uppercase main folder and capitalized subfolders
@@ -102,12 +102,12 @@ def init_with_import(
                 os.makedirs(os.path.join(main_folder_path, subfolder), exist_ok=True)
 
             print(
-                f"Repository {spatial_plan} created successfully with the required structure."
+                f"✅ Repository {spatial_plan} created successfully with the required structure."
             )
 
     except ImportError as e:
-        print(f"ImportError: {e}")
+        print(f"❗️ ImportError: {e}")
     except subprocess.CalledProcessError as e:
-        print(f"Error during repository initialization: {e}")
+        print(f"❗️ Error during repository initialization: {e}")
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print(f"❗️ An unexpected error occurred: {e}")

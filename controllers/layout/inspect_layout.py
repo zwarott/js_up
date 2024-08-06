@@ -23,7 +23,7 @@ def is_24bit_raster(raster_path: str) -> bool:
     try:
         dataset = gdal.Open(raster_path)
         if dataset is None:
-            print(f"Could not open {raster_path}")
+            print(f"❗️ Could not open {raster_path}")
             return False
 
         # Check if the raster has 3 bands
@@ -39,18 +39,18 @@ def is_24bit_raster(raster_path: str) -> bool:
         return True
 
     except Exception as e:
-        print(f"Error checking raster {raster_path}: {e}")
+        print(f"❗️ Error checking raster {raster_path}: {e}")
         return False
 
 
-def check_24bit_depth(target_dir: str) -> None:
+def check_24bit_depth(raster_dir: str) -> None:
     """
-    Check if all rasters in a target directory are 24-bit.
+    Check if all rasters in a raster directory are 24-bit.
 
     Parameters
     ----------
-    directory : str
-        The path to the target directory.
+    raster_dir : str
+        The path to the raster directory.
 
     Returns
     -------
@@ -58,12 +58,12 @@ def check_24bit_depth(target_dir: str) -> None:
         A list of tuples containing the file name and a boolean indicating if it's 24-bit.
     """
     results = []
-    for filename in os.listdir(target_dir):
+    for filename in os.listdir(raster_dir):
         if filename.lower().endswith((".tif", ".tiff", ".png", ".bmp")):
-            file_path = os.path.join(target_dir, filename)
+            file_path = os.path.join(raster_dir, filename)
             is_24bit = is_24bit_raster(file_path)
             results.append((filename, is_24bit))
 
     for filename, is_24bit in results:
-        status = "is 24-bit" if is_24bit else "is not 24-bit"
+        status = "✅ is 24-bit" if is_24bit else "❌ is not 24-bit"
         print(f"{filename}: {status}")

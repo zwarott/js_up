@@ -1,6 +1,10 @@
 import os
 import subprocess
 from osgeo import ogr
+import warnings
+
+# Suppress GDAL warning about future exceptions
+warnings.filterwarnings("ignore", category=FutureWarning, message=".*exceptions.*")
 
 
 def export_working_dir(
@@ -10,9 +14,11 @@ def export_working_dir(
     exclude_layers: list,
     include_layers: list,
     export_empty_layers: bool,
+    encoding: str,
 ) -> None:
     """
-    Export specified layers from a GeoPackage to shapefiles in a specified output directory.
+    Export specified layers from a GeoPackage to ESRI Shapefiles
+    in a specified output directory.
 
     Parameters
     ----------
@@ -28,6 +34,8 @@ def export_working_dir(
         List of layer names to explicitly include in export.
     export_empty_layers : bool
         Whether to export empty layers (True or False).
+    encoding : str
+        Specify ESRI Shapefile encoding.
 
     Returns
     -------
@@ -38,15 +46,14 @@ def export_working_dir(
 
     # Verify the GeoPackage file exists
     if not os.path.isfile(gpkg_path):
-        print(f"GeoPackage file not found: {gpkg_path}")
+        print(f"❗️ GeoPackage file not found: {gpkg_path}")
         exit(1)
 
     # Print the full path of the GeoPackage
-    print(f"GeoPackage full path: {os.path.abspath(gpkg_path)}")
-
-    # Print the contents of the directory containing the GeoPackage
-    print(f"Contents of {os.path.dirname(gpkg_path)}:")
-    print(os.listdir(os.path.dirname(gpkg_path)))
+    print(
+        f"💡 GeoPackage full path: {os.path.abspath(gpkg_path)}",
+        end="\n\n",
+    )
 
     # List all layers in the GeoPackage using Kart versioning
     try:
@@ -58,18 +65,20 @@ def export_working_dir(
             cwd=working_dir,
         )
         layers = result.stdout.strip().split()
+
     except subprocess.CalledProcessError as e:
-        print("Failed to list layers in the GeoPackage.")
+        print("❌ Failed to list layers in the GeoPackage.")
         print(e)
         exit(1)
 
     if not layers:
-        print("No layers found in the GeoPackage.")
+        print("❗️ No layers found in the GeoPackage.")
         exit(1)
 
     # Print each layer on a new line using unpacking
-    print("Found layers:")
+    print(" 💡 Found layers:")
     print(*layers, sep="\n")
+    print("")
 
     # Set GDAL to use exceptions
     ogr.UseExceptions()
@@ -77,7 +86,7 @@ def export_working_dir(
     # Open the GeoPackage
     gpkg_ds = ogr.Open(gpkg_path)
     if gpkg_ds is None:
-        print(f"Failed to open GeoPackage: {gpkg_path}")
+        print(f"❌ Failed to open GeoPackage: {gpkg_path}")
         exit(1)
 
     # Iterate through each layer
@@ -89,38 +98,54 @@ def export_working_dir(
                 # Get the layer
                 layer = gpkg_ds.GetLayerByName(layer_name)
                 if layer is None:
-                    print(f"Layer {layer_name} not found in GeoPackage.")
+                    print(f"❗️ Layer {layer_name} not found in GeoPackage.")
                     continue
 
                 # Check if the layer is empty
                 if layer.GetFeatureCount() == 0 and not export_empty_layers:
-                    print(f"Skipping empty layer: {layer_name}")
+                    print(f"❗️ Skipping empty layer: {layer_name}", end="\n\n")
                     continue
 
-                # Export the layer to a shapefile with UTF-8 encoding
+                print(f"⭐️ Exporting layer: {layer_name}")
+
+                # Get the EPSG code of the layer's spatial reference system (SRS)
+                srs = layer.GetSpatialRef()
+                epsg_code = (
+                    srs.GetAttrValue("AUTHORITY", 1) if srs is not None else "Unknown"
+                )
+                print(f"💡 EPSG: {epsg_code}")
+
+                # Export the layer to a shapefile with specified encoding
                 shapefile_path = os.path.join(output_dir, f"{layer_name}.shp")
-                print(f"Exporting layer: {layer_name} to {shapefile_path}")
 
-                driver = ogr.GetDriverByName("ESRI Shapefile")
+                driver_name = "ESRI Shapefile"
+                driver = ogr.GetDriverByName(driver_name)
                 if driver is None:
-                    print("ESRI Shapefile driver is not available.")
+                    print("❗️ ESRI Shapefile driver is not available.")
                     exit(1)
-
+                else:
+                    print(f"💡 Format: {driver_name}")
                 # Create the output shapefile
                 if os.path.exists(shapefile_path):
                     driver.DeleteDataSource(shapefile_path)
                 out_ds = driver.CreateDataSource(shapefile_path)
                 if out_ds is None:
-                    print(f"Failed to create shapefile: {shapefile_path}")
+                    print(f"❌ Failed to create shapefile: {shapefile_path}")
                     continue
 
                 out_layer = out_ds.CreateLayer(
-                    layer_name, srs=layer.GetSpatialRef(), geom_type=layer.GetGeomType()
+                    layer_name,
+                    srs=srs,
+                    geom_type=layer.GetGeomType(),
+                    options=[f"ENCODING={encoding}"],
                 )
+
                 if out_layer is None:
-                    print(f"Failed to create layer: {layer_name} in shapefile.")
+                    print(f"❌ Failed to create layer: {layer_name} in shapefile.")
                     continue
 
+                else:
+                    print(f"💡 Encoding: {encoding}")
                 # Copy the layer's fields
                 layer_defn = layer.GetLayerDefn()
                 for i in range(layer_defn.GetFieldCount()):
@@ -133,10 +158,13 @@ def export_working_dir(
 
                 # Close the output shapefile
                 out_ds = None
-                print(f"Successfully exported {layer_name} to {shapefile_path}")
+                print(
+                    "✅ Successfully exported!",
+                    end="\n\n",
+                )
             else:
-                print(f"Skipping layer: {layer_name}")
+                print(f"❗️ Skipping layer: {layer_name}", end="\n\n")
         else:
-            print(f"Skipping layer: {layer_name}")
+            print(f"❗️ Skipping layer: {layer_name}", end="\n\n")
 
-    print("Export completed.")
+    print("✅ Export completed.")
