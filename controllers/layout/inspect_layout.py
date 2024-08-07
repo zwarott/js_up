@@ -54,15 +54,22 @@ def check_24bit_depth(raster_dir: str) -> None:
 
     Returns
     -------
-    list
-        A list of tuples containing the file name and a boolean indicating if it's 24-bit.
+    None
     """
-    results = []
-    for filename in os.listdir(raster_dir):
-        if filename.lower().endswith((".tif", ".tiff", ".png", ".bmp")):
-            file_path = os.path.join(raster_dir, filename)
-            is_24bit = is_24bit_raster(file_path)
-            results.append((filename, is_24bit))
+    raster_files = [
+        f
+        for f in os.listdir(raster_dir)
+        if f.lower().endswith((".tif", ".tiff", ".png", ".bmp"))
+    ]
+
+    if not raster_files:
+        print(f"❗️ No raster files found in the directory '{raster_dir}'.")
+        return
+
+    results = [
+        (filename, is_24bit_raster(os.path.join(raster_dir, filename)))
+        for filename in raster_files
+    ]
 
     for filename, is_24bit in results:
         status = "✅ is 24-bit" if is_24bit else "❌ is not 24-bit"
