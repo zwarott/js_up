@@ -10,17 +10,17 @@ from controllers.repo.import_data import import_shp_dir
 from aux_data.gpkg_layers import EXCLUDE_LAYERS, INCLUDE_LAYERS
 from config import (
     MUNICIPALITIES,
-    DEFAULT_PATH,
-    repo_dir,
-    working_copy,
-    output_data_dir,
-    output_layout_dir,
-    mun_code,
-    new_or_change,
-    change_number,
-    gpkg_to_import,
-    shp_dir_to_import,
-    encoding,
+    DEFAULT_REPO,
+    REPO_DIR,
+    WORKING_COPY,
+    OUTPUT_DATA_DIR,
+    OUTPUT_LAYOUT_DIR,
+    MUN_CODE,
+    NEW_OR_CHANGE,
+    CHANGE_NUMBER,
+    GPKG_TO_IMPORT,
+    SHP_DIR_TO_IMPORT,
+    ENCODING,
 )
 
 # Create a dictionary to map function names to their corresponding
@@ -29,49 +29,49 @@ function_map = {
     "export_working_dir": {
         "func": export_working_dir,
         "params": {
-            "gpkg_path": working_copy,
-            "output_dir": output_data_dir,
-            "working_dir": repo_dir,
+            "gpkg_path": WORKING_COPY,
+            "output_dir": OUTPUT_DATA_DIR,
+            "working_dir": REPO_DIR,
             "exclude_layers": EXCLUDE_LAYERS,
             "include_layers": INCLUDE_LAYERS,
             "export_empty_layers": False,
-            "encoding": encoding,
+            "encoding": ENCODING,
         },
     },
     "shp_overview": {
         "func": shp_overview,
         "params": {
-            "data_dir": output_data_dir,
+            "data_dir": OUTPUT_DATA_DIR,
         },
     },
     "init_with_import": {
         "func": init_with_import,
         "params": {
-            "default_path": DEFAULT_PATH,
+            "default_repo": DEFAULT_REPO,
             "municipalities": MUNICIPALITIES,
-            "mun_code": mun_code,
-            "new_or_change": new_or_change,
-            "change_number": change_number,
-            "gpkg_to_import": gpkg_to_import,
+            "mun_code": MUN_CODE,
+            "new_or_change": NEW_OR_CHANGE,
+            "change_number": CHANGE_NUMBER,
+            "gpkg_to_import": GPKG_TO_IMPORT,
         },
     },
     "import_shp_dir": {
         "func": import_shp_dir,
         "params": {
-            "shp_dir": shp_dir_to_import,
-            "repo_dir": repo_dir,
+            "shp_dir": SHP_DIR_TO_IMPORT,
+            "repo_dir": REPO_DIR,
         },
     },
     "raster_to_24bit": {
         "func": raster_to_24bit,
         "params": {
-            "raster_dir": output_layout_dir,
+            "raster_dir": OUTPUT_LAYOUT_DIR,
         },
     },
     "check_24bit_depth": {
         "func": check_24bit_depth,
         "params": {
-            "raster_dir": output_layout_dir,
+            "raster_dir": OUTPUT_LAYOUT_DIR,
         },
     },
 }
@@ -89,8 +89,8 @@ def execute_function(function_name):
 
 # Example usage
 # execute_function("export_working_dir")
-# execute_function("init_with_import")
+execute_function("init_with_import")
 # execute_function("raster_to_24bit")
 # execute_function("check_24bit_depth")
 # execute_function("shp_overview")
-execute_function("import_shp_dir")
+# execute_function("import_shp_dir")

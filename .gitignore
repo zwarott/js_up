@@ -6,9 +6,6 @@
 ## Ignore testing scenarios for NGÚP
 /test
 
-# Ignore config file with parameters
-config.py
-
 # Byte-compiled / optimized / DLL files
 __pycache__
 
