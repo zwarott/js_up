@@ -25,7 +25,7 @@ def normalize_mun_name(mun_name: str) -> str:
 
 def init_with_import(
     default_repo: str,
-    municipalities_csv: str,
+    municipalities: str,
     mun_code: int,
     new_or_change: int,
     change_number: int,
@@ -39,7 +39,7 @@ def init_with_import(
     ----------
     default_repo : str
         The default repository path with all spatial plans.
-    municipalities_csv : str
+    municipalities : str
         The path to the municipalities CSV file.
     mun_code : int
         The municipality code.
@@ -56,7 +56,7 @@ def init_with_import(
     """
     try:
         # Load the municipalities CSV file
-        df = pd.read_csv(municipalities_csv)
+        df = pd.read_csv(municipalities)
 
         # Validate MUN_CODE and get corresponding MUN_NAME
         if mun_code not in df["mun_code"].values:
