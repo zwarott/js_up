@@ -10,7 +10,7 @@ warnings.filterwarnings("ignore", category=FutureWarning, message=".*exceptions.
 def export_working_dir(
     gpkg_path: str,
     output_dir: str,
-    working_dir: str,
+    kart_repo: str,
     exclude_layers: list,
     include_layers: list,
     export_empty_layers: bool,
@@ -62,7 +62,7 @@ def export_working_dir(
             capture_output=True,
             text=True,
             check=True,
-            cwd=working_dir,
+            cwd=kart_repo,
         )
         layers = result.stdout.strip().split()
 

@@ -35,7 +35,7 @@ MUNICIPALITIES = get_env_variable("MUNICIPALITIES")
 DEFAULT_REPO = get_env_variable("DEFAULT_REPO")
 
 # Define the path where to run the `kart` command
-REPO_DIR = get_env_variable("REPO_DIR")
+KART_REPO = get_env_variable("KART_REPO")
 
 # Define the path to your GeoPackage and the output directory
 WORKING_COPY = get_env_variable("WORKING_COPY")

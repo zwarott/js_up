@@ -23,7 +23,7 @@ def list_shp(shp_dir):
     ]
 
 
-def import_shp_dir(shp_dir, repo_dir):
+def import_shp_dir(shp_dir, kart_repo):
     """
     Imports shapefiles into a KART working copy.
 
@@ -43,7 +43,7 @@ def import_shp_dir(shp_dir, repo_dir):
 
     try:
         # Change the working directory to the KART repository
-        os.chdir(repo_dir)
+        os.chdir(kart_repo)
 
         # Import each shapefile into KART working copy
         for shp in list_shp(shp_dir):

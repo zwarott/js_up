@@ -6,12 +6,13 @@ from controllers.layout.inspect_layout import check_24bit_depth
 
 from controllers.repo.repo_init import init_with_import
 from controllers.repo.import_data import import_shp_dir
+from controllers.repo.project import init_save, next_save
 
 from aux_data.gpkg_layers import EXCLUDE_LAYERS, INCLUDE_LAYERS
 from config import (
     MUNICIPALITIES,
     DEFAULT_REPO,
-    REPO_DIR,
+    KART_REPO,
     WORKING_COPY,
     OUTPUT_DATA_DIR,
     OUTPUT_LAYOUT_DIR,
@@ -31,7 +32,7 @@ function_map = {
         "params": {
             "gpkg_path": WORKING_COPY,
             "output_dir": OUTPUT_DATA_DIR,
-            "working_dir": REPO_DIR,
+            "kart_repo": KART_REPO,
             "exclude_layers": EXCLUDE_LAYERS,
             "include_layers": INCLUDE_LAYERS,
             "export_empty_layers": False,
@@ -59,7 +60,19 @@ function_map = {
         "func": import_shp_dir,
         "params": {
             "shp_dir": SHP_DIR_TO_IMPORT,
-            "repo_dir": REPO_DIR,
+            "kart_repo": KART_REPO,
+        },
+    },
+    "init_save": {
+        "func": init_save,
+        "params": {
+            "working_copy": WORKING_COPY,
+        },
+    },
+    "next_save": {
+        "func": next_save,
+        "params": {
+            "working_copy": WORKING_COPY,
         },
     },
     "raster_to_24bit": {
@@ -89,8 +102,10 @@ def execute_function(function_name):
 
 # Example usage
 # execute_function("export_working_dir")
-execute_function("init_with_import")
+# execute_function("init_with_import")
 # execute_function("raster_to_24bit")
 # execute_function("check_24bit_depth")
 # execute_function("shp_overview")
 # execute_function("import_shp_dir")
+# execute_function("init_save")
+execute_function("next_save")
