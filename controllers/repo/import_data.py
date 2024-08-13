@@ -2,7 +2,7 @@ import os
 import subprocess
 
 
-def list_shp(shp_dir):
+def list_shp(shp_dir: str):
     """
     Lists all shapefiles in the given directory.
 
@@ -23,15 +23,16 @@ def list_shp(shp_dir):
     ]
 
 
-def import_shp_dir(shp_dir, kart_repo):
+def import_shp_dir(shp_dir: str, kart_repo: str):
     """
-    Imports shapefiles into a KART working copy.
+    Imports shapefiles into a KART working copy. Existing layers are
+    replaced by imported ones, if there are any changes.
 
     Parameters
     ----------
     shp_dir : str
         The path to the directory containing shapefiles.
-    repo_dir : str
+    kart_repo : str
         The path to the KART repository.
 
     Returns
@@ -49,12 +50,12 @@ def import_shp_dir(shp_dir, kart_repo):
         for shp in list_shp(shp_dir):
             try:
                 result = subprocess.run(
-                    ["kart", "import", shp],
+                    ["kart", "import", "--replace-existing", shp],
                     capture_output=True,
                     text=True,
                 )
                 if result.returncode == 0:
-                    print(f"✅ Successfully imported {shp}")
+                    print(f"✅ Successfully imported {shp}", end="\n\n")
                 else:
                     print(f"❌ Failed to import {shp}")
                     print(result.stderr)
