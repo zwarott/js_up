@@ -1,12 +1,12 @@
-from controllers.data.export_data import export_working_dir
-from controllers.data.inspect_data import shp_overview
+from controllers.data.export import export_working_dir
+from controllers.data.inspect import shp_overview
 
-from controllers.layout.convert_layout import raster_to_24bit
-from controllers.layout.inspect_layout import check_24bit_depth
+from controllers.layout.convert import raster_to_24bit
+from controllers.layout.inspect import check_24bit_depth
 
-from controllers.repo.repo_init import init_with_import
-from controllers.repo.import_data import import_shp_dir
-from controllers.repo.project import init_save, next_save
+from controllers.repo.initialise import init_with_import
+from controllers.repo.data_import import import_shp_dir
+from controllers.repo.qgis_project_manage import init_save, next_save
 
 from aux_data.gpkg_layers import EXCLUDE_LAYERS, INCLUDE_LAYERS
 from config import (
@@ -106,6 +106,6 @@ def execute_function(function_name):
 # execute_function("raster_to_24bit")
 # execute_function("check_24bit_depth")
 # execute_function("shp_overview")
-# execute_function("import_shp_dir")
+execute_function("import_shp_dir")
 # execute_function("init_save")
-execute_function("next_save")
+# execute_function("next_save")
