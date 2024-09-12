@@ -1,5 +1,6 @@
 from controllers.data.export import export_working_dir
 from controllers.data.inspect import shp_overview
+from controllers.data.convert import int64_to_int32
 
 from controllers.layout.convert import raster_to_24bit
 from controllers.layout.inspect import check_24bit_depth
@@ -43,6 +44,12 @@ function_map = {
         "func": shp_overview,
         "params": {
             "data_dir": OUTPUT_DATA_DIR,
+        },
+    },
+    "int64_to_int32": {
+        "func": int64_to_int32,
+        "params": {
+            "gpkg_path": WORKING_COPY,
         },
     },
     "init_with_import": {
@@ -101,11 +108,12 @@ def execute_function(function_name):
 
 
 # Example usage
-# execute_function("export_working_dir")
+execute_function("export_working_dir")
 # execute_function("init_with_import")
 # execute_function("raster_to_24bit")
 # execute_function("check_24bit_depth")
-# execute_function("shp_overview")
-execute_function("import_shp_dir")
+execute_function("shp_overview")
+# execute_function("import_shp_dir")
 # execute_function("init_save")
 # execute_function("next_save")
+# execute_function("int64_to_int32")
