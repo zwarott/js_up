@@ -74,3 +74,46 @@ def check_24bit_depth(raster_dir: str) -> None:
     for filename, is_24bit in results:
         status = "✅ is 24-bit" if is_24bit else "❌ is not 24-bit"
         print(f"{filename}: {status}")
+
+
+def check_dpi(raster_dir):
+    """
+    Check the DPI (resolution) of all raster files in the specified directory using GDAL.
+
+    Parameters:
+    -----------
+    raster_dir : str
+        Path to the directory containing raster files.
+    """
+    supported_formats = (".png", ".tif", ".tiff", ".bmp")
+
+    if not os.path.exists(raster_dir):
+        print(f"Directory '{raster_dir}' does not exist.")
+        return
+
+    print(f"Checking DPI for raster files in directory: {raster_dir}\n")
+
+    for file_name in os.listdir(raster_dir):
+        file_path = os.path.join(raster_dir, file_name)
+
+        if os.path.isfile(file_path) and file_name.lower().endswith(supported_formats):
+            try:
+                dataset = gdal.Open(file_path)
+                if dataset is None:
+                    print(f"Unable to open '{file_name}'. Skipping.")
+                    continue
+
+                metadata = dataset.GetMetadata()
+                x_dpi = metadata.get("TIFFTAG_XRESOLUTION")
+                y_dpi = metadata.get("TIFFTAG_YRESOLUTION")
+
+                print(f"File: {file_name}")
+                if x_dpi and y_dpi:
+                    print(f" - DPI: {x_dpi} x {y_dpi}")
+                else:
+                    print(" - DPI information not available in metadata.")
+
+            except Exception as e:
+                print(f"Error processing '{file_name}': {e}")
+        else:
+            print(f"Skipped: {file_name} (not a supported raster format)")
